@@ -1,0 +1,51 @@
+name: Check
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+#env:
+#  CI: true
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup Node with cache
+        uses: actions/setup-node@v2
+        with: { node-version: "16", cache: "yarn" }
+      - name: Install Yarn packages
+        run: yarn install --frozen-lockfile
+      - name: Check prettier
+        run: |
+          yarn run prettier
+          CODE=$?
+          if [ "$CODE" != "0"  ]; then exit 1; fi
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup Node with cache
+        uses: actions/setup-node@v2
+        with: { node-version: "16", cache: "yarn" }
+      - name: Install Yarn packages
+        run: yarn install --frozen-lockfile
+      - name: Compile TypeScript to JavaScript
+        run: yarn run build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup Node with cache
+        uses: actions/setup-node@v2
+        with: { node-version: "16", cache: "yarn" }
+      - name: Install Yarn packages
+        run: yarn install --frozen-lockfile
+      - name: Check tests
+        run: yarn run test

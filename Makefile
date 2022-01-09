@@ -1,4 +1,6 @@
 prettier:
-	npm run prettier
+	yarn run prettier
 prettier-fix:
-	npm run prettier:fix
+	yarn run prettier:fix
+test:
+	yarn run test
